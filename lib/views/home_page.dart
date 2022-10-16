@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,8 +9,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int margin = 0;
+  int weather = 0;
+
   @override
   Widget build(BuildContext context) {
+    List list = [
+      RainnyWidget(margin: margin, color: Colors.red),
+      RainnyWidget(
+        margin: margin,
+        color: Colors.blue,
+      )
+    ];
     return Scaffold(
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16),
@@ -27,13 +38,9 @@ class _HomePageState extends State<HomePage> {
                 'Segunda,11:35 da manhã',
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(top: 32.0, bottom: 32),
-                child: Icon(
-                  Icons.sunny,
-                  size: 160,
-                  color: Colors.yellow,
-                ),
+                child: list[weather],
               ),
               const Padding(
                 padding: EdgeInsets.only(bottom: 8.0),
@@ -57,7 +64,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(color: Colors.grey, fontSize: 18),
               ),
               Container(
-                margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: EdgeInsets.symmetric(vertical: 8),
                   width: 48,
                   child: const Divider(
                     thickness: 2,
@@ -69,31 +76,41 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     _bottomwidget(
                         Icon(Icons.wb_sunny_outlined), 'Sunrise', '6.0'),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 2),
-                      height: 32,
-                      width: 2,
-                      color: Colors.blueGrey,
-                    ),
-                    _bottomwidget(Icon(Icons.wind_power_outlined), 'Wind speed', '6.0'),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 2),
-                      height: 32,
-                      width: 2,
-                      color: Colors.blueGrey,
-                    ),
+                    _mydivider(),
+                    _bottomwidget(
+                        Icon(Icons.wind_power_outlined), 'Wind speed', '6.0'),
+                    _mydivider(),
                     _bottomwidget(Icon(Icons.alternate_email), 'Temp', '6.0'),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: _bottomwidget(Icon(Icons.shuffle,size: 40,), 'Random', ''),
-              )
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          if (margin == 100) {
+                            weather = 1;
+                            margin = 0;
+                          } else {
+                            margin = 100;
+                          }
+                        });
+                      },
+                      child: Text('Random')))
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Container _mydivider() {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 2),
+      height: 32,
+      width: 2,
+      color: Colors.blueGrey,
     );
   }
 
