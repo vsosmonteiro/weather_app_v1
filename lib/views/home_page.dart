@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
+import 'package:weather_app_v1/widgets/weather_widgets/droplet_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,16 +11,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int margin = 0;
+  double margintop = 0;
   int weather = 0;
 
   @override
   Widget build(BuildContext context) {
     List list = [
-      RainnyWidget(margin: margin, color: Colors.red),
-      RainnyWidget(
-        margin: margin,
-        color: Colors.blue,
-      )
+      RainnyWidget(margin: margin, color: Colors.blue, margintop: margintop)
     ];
     return Scaffold(
       body: SingleChildScrollView(
@@ -28,7 +26,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               const Padding(
-                padding: EdgeInsets.only(top: 96, bottom: 1),
+                padding: EdgeInsets.only(top: 48, bottom: 1),
                 child: Text(
                   'Maceio',
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -39,7 +37,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 32.0, bottom: 32),
+                padding: EdgeInsets.only(top: 32.0, bottom: 0),
                 child: list[weather],
               ),
               const Padding(
@@ -89,8 +87,8 @@ class _HomePageState extends State<HomePage> {
                   child: ElevatedButton(
                       onPressed: () {
                         setState(() {
+                          margintop=20;
                           if (margin == 100) {
-                            weather = 1;
                             margin = 0;
                           } else {
                             margin = 100;
