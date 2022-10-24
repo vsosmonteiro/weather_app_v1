@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/droplet_widget.dart';
+import 'package:weather_app_v1/widgets/weather_widgets/snowy_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,25 +11,34 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int margin = 0;
-  double margintop = 0;
+  int margin1 = 0;
   int weather = 0;
+  int times = 0;
+  bool onpressed = false;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     List list = [
-      RainnyWidget(margin: margin, color: Colors.blue, margintop: margintop)
+      RainnyWidget(margin: margin1, color: Colors.blue),
+      RainnyWidget(margin: margin1, color: Colors.blue),
+      RainnyWidget(margin: margin1, color: Colors.blue),
+      SnowyWidget(margin: margin1),
     ];
     return Scaffold(
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Center(
           child: Column(
             children: [
               const Padding(
                 padding: EdgeInsets.only(top: 48, bottom: 1),
                 child: Text(
-                  'Maceio',
+                  'Maceió',
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -37,7 +47,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 32.0, bottom: 0),
+                padding: const EdgeInsets.only(top: 32.0, bottom: 0),
                 child: list[weather],
               ),
               const Padding(
@@ -62,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(color: Colors.grey, fontSize: 18),
               ),
               Container(
-                  margin: EdgeInsets.symmetric(vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   width: 48,
                   child: const Divider(
                     thickness: 2,
@@ -73,29 +83,23 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _bottomwidget(
-                        Icon(Icons.wb_sunny_outlined), 'Sunrise', '6.0'),
+                        const Icon(Icons.wb_sunny_outlined), 'Sunrise', '6.0'),
+                    _mydivider(),
+                    _bottomwidget(const Icon(Icons.wind_power_outlined),
+                        'Wind speed', '6.0'),
                     _mydivider(),
                     _bottomwidget(
-                        Icon(Icons.wind_power_outlined), 'Wind speed', '6.0'),
-                    _mydivider(),
-                    _bottomwidget(Icon(Icons.alternate_email), 'Temp', '6.0'),
+                        const Icon(Icons.alternate_email), 'Temp', '6.0'),
                   ],
                 ),
               ),
               Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          margintop=20;
-                          if (margin == 100) {
-                            margin = 0;
-                          } else {
-                            margin = 100;
-                          }
-                        });
-                      },
-                      child: Text('Random')))
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ElevatedButton(
+                  onPressed: onpressed == false ? () => _setweather() : null,
+                  child: const Text('Random'),
+                ),
+              )
             ],
           ),
         ),
@@ -103,9 +107,45 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  void _setweather() async {
+    if (times < 2) {
+      setState(() {
+        onpressed = true;
+        times += 1;
+        if (margin1 == 100) {
+          margin1 = 0;
+        } else {
+          margin1 = 100;
+        }
+      });
+    } else {
+      setState(() {
+        onpressed = true;
+        if (weather < 3) {
+          weather += 1;
+        } else {
+          weather = 0;
+        }
+      });
+
+      await Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          margin1 = 100;
+          times = 1;
+
+        });
+      });
+    }
+    await Future.delayed(const Duration(seconds: 1),() {
+      setState(() {
+        onpressed = false;
+      });
+    });
+  }
+
   Container _mydivider() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 2),
+      margin: const EdgeInsets.symmetric(horizontal: 2),
       height: 32,
       width: 2,
       color: Colors.blueGrey,

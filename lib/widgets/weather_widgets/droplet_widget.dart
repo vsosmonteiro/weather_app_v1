@@ -20,7 +20,7 @@ class _DropletWidgetState extends State<DropletWidget>
     vsync: this,
   )..repeat();
   late final Animation<Offset> _offsetAnimation = Tween<Offset>(
-    begin: Offset(0,-widget.offset),
+    begin: Offset(0,-widget.offset+1),
     end:  Offset(0, 6-widget.offset),
   ).animate(CurvedAnimation(
     parent: _controller,
