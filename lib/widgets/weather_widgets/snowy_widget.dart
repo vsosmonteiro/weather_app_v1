@@ -23,23 +23,51 @@ class _SnowyWidgetState extends State<SnowyWidget> {
                   widget.margin == 0 ? MediaQuery.of(context).size.width : 0),
           duration: const Duration(seconds: 1),
           width: 200,
-          height: 120,
+          height: 116,
           child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage('assets/icons/newcloud.png')))),
         ),
         Align(
+          alignment: Alignment.center,
           child: AnimatedContainer(
-              duration: Duration(seconds: 1),
+              duration: const Duration(seconds: 1),
               margin: EdgeInsets.only(
                   right:
                       widget.margin == 0 ? MediaQuery.of(context).size.width : 0),
-              child: Padding(
-                padding: const EdgeInsets.only(bottom: 64.0),
-                child: FlakeWidget(),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth:100 ),
+                child: Row(
+                  children: const [
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 10,right: 10,bottom: 54.0),
+                        child: FlakeWidget(),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 64.0),
+                        child: FlakeWidget(),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(top:30,right: 10,bottom: 34),
+                        child: FlakeWidget(),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 64.0),
+                        child: FlakeWidget(),
+                      ),
+                    )
+                  ],
+                ),
               )),
-        )
+        ),
       ],
     );
   }

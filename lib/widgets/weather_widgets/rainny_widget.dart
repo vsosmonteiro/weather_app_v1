@@ -30,7 +30,7 @@ class _RainnyWidgetState extends State<RainnyWidget> {
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/icons/cloud.png'),
+                image: AssetImage('assets/icons/newcloud.png'),
               ),
             ),
           ),

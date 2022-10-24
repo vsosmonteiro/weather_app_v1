@@ -25,8 +25,6 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List list = [
       RainnyWidget(margin: margin1, color: Colors.blue),
-      RainnyWidget(margin: margin1, color: Colors.blue),
-      RainnyWidget(margin: margin1, color: Colors.blue),
       SnowyWidget(margin: margin1),
     ];
     return Scaffold(
@@ -121,7 +119,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       setState(() {
         onpressed = true;
-        if (weather < 3) {
+        if (weather < 1) {
           weather += 1;
         } else {
           weather = 0;

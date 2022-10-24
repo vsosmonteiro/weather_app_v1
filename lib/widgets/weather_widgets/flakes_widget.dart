@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class FlakeWidget extends StatefulWidget {
@@ -21,8 +23,8 @@ class _FlakeWidgetState extends State<FlakeWidget> {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: Duration(seconds: animationTime),
-      width: 20,
-      height: 20,
+      width: 14,
+      height: 14,
       decoration:  const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/icons/snowflake.png'),
