@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
-import 'package:weather_app_v1/widgets/weather_widgets/droplet_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/snowy_widget.dart';
+import 'package:weather_app_v1/widgets/weather_widgets/sun_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,8 +25,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List list = [
-      RainnyWidget(margin: margin1, color: Colors.blue),
-      SnowyWidget(margin: margin1),
+      Coveredsun(margin: margin1,),
+      SunWidget(margin: margin1,),
+      RainnyWidget(margin: margin1),
+      SnowyWidget(margin: margin1)
+
     ];
     return Scaffold(
       body: SingleChildScrollView(
@@ -119,7 +123,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       setState(() {
         onpressed = true;
-        if (weather < 1) {
+        if (weather < 3) {
           weather += 1;
         } else {
           weather = 0;
@@ -130,11 +134,10 @@ class _HomePageState extends State<HomePage> {
         setState(() {
           margin1 = 100;
           times = 1;
-
         });
       });
     }
-    await Future.delayed(const Duration(seconds: 1),() {
+    await Future.delayed(const Duration(seconds: 1), () {
       setState(() {
         onpressed = false;
       });

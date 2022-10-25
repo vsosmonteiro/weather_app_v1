@@ -22,7 +22,7 @@ class _FlakeWidgetState extends State<FlakeWidget> {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(seconds: animationTime),
+      duration: Duration(seconds: 0),
       width: 14,
       height: 14,
       decoration:  const BoxDecoration(

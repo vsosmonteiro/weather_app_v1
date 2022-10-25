@@ -5,11 +5,9 @@ class RainnyWidget extends StatefulWidget {
   RainnyWidget({
     Key? key,
     required this.margin,
-    required this.color,
   });
 
   int margin;
-  Color color;
 
   @override
   State<RainnyWidget> createState() => _RainnyWidgetState();
