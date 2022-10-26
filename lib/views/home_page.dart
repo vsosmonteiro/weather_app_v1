@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app_v1/services/weather_service.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/lightning_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
@@ -102,6 +103,15 @@ class _HomePageState extends State<HomePage> {
                 child: ElevatedButton(
                   onPressed: onpressed == false ? () => _setweather() : null,
                   child: const Text('Random'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: ElevatedButton(
+                  onPressed: (){
+                    var a =WeatherService().fetchWeather();
+                  },
+                  child: const Text('Current weather'),
                 ),
               )
             ],
