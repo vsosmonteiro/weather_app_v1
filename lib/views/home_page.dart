@@ -125,7 +125,7 @@ class _HomePageState extends State<HomePage> {
     } else {
       setState(() {
         onpressed = true;
-        if (weather < 3) {
+        if (weather < 4) {
           weather += 1;
         } else {
           weather = 0;

@@ -50,7 +50,7 @@ class _LightningWidgetState extends State<LightningWidget>
               ),
             ),
             ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 150, minWidth: 0),
+              constraints: BoxConstraints(maxWidth: 150, minWidth: 0,minHeight: 24),
               child: widget.margin == 0
                   ? null
                   : FadeTransition(
