@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
+import 'package:weather_app_v1/widgets/weather_widgets/lightning_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/snowy_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/sun_widget.dart';
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List list = [
       Coveredsun(margin: margin1,),
+      LightningWidget(margin: margin1),
       SunWidget(margin: margin1,),
       RainnyWidget(margin: margin1),
       SnowyWidget(margin: margin1)
