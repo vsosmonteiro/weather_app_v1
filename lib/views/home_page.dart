@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app_v1/repositories/weather_repository.dart';
 import 'package:weather_app_v1/services/weather_service.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/lightning_widget.dart';
@@ -27,12 +28,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List list = [
-      Coveredsun(margin: margin1,),
+      Coveredsun(
+        margin: margin1,
+      ),
       LightningWidget(margin: margin1),
-      SunWidget(margin: margin1,),
+      SunWidget(
+        margin: margin1,
+      ),
       RainnyWidget(margin: margin1),
       SnowyWidget(margin: margin1)
-
     ];
     return Scaffold(
       body: SingleChildScrollView(
@@ -88,13 +92,13 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     _bottomwidget(
-                        const Icon(Icons.wb_sunny_outlined), 'Sunrise', '6.0'),
+                        'assets/icons/sunrise.png', 'Sunrise', '6.0'),
                     _mydivider(),
-                    _bottomwidget(const Icon(Icons.wind_power_outlined),
+                    _bottomwidget('assets/icons/windy.png',
                         'Wind speed', '6.0'),
                     _mydivider(),
                     _bottomwidget(
-                        const Icon(Icons.alternate_email), 'Temp', '6.0'),
+                        'assets/icons/high-temperatures.png', 'Temp', '6.0'),
                   ],
                 ),
               ),
@@ -108,8 +112,8 @@ class _HomePageState extends State<HomePage> {
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: ElevatedButton(
-                  onPressed: (){
-                    var a =WeatherService().fetchWeather();
+                  onPressed: () {
+                    var a = WeatherRepository().repoFetchWeather();
                   },
                   child: const Text('Current weather'),
                 ),
@@ -165,10 +169,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Column _bottomwidget(Icon icon1, String text1, String text2) {
+  Column _bottomwidget(String asset, String text1, String text2) {
     return Column(
       children: [
-        icon1,
+        Container(
+          height: 40,
+          width: 40,
+          decoration:
+              BoxDecoration(image: DecorationImage(image: AssetImage(asset))),
+        ),
         Text(
           text1,
           style: const TextStyle(fontSize: 18),

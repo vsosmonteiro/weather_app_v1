@@ -21,7 +21,7 @@ class WeatherModel {
 class CurrentWeather {
   double? temperature;
   double? windspeed;
-  int? winddirection;
+  double? winddirection;
   int? weathercode;
   String? time;
 
