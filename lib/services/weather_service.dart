@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:weather_app_v1/models/exceptions/api_Exception.dart';
 
-class WeatherService {
-  Future<Map<String, dynamic>> fetchWeather() async {
+abstract class WeatherService {
+  static Future<Map<String, dynamic>> fetchWeather() async {
     try {
       Response response = await Dio().get(
           'https://api.open-meteo.com/v1/forecast?latitude=-9.66&longitude=-35.70&current_weather=true');

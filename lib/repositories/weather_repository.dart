@@ -1,11 +1,10 @@
 import 'package:weather_app_v1/models/weather_model.dart';
 import 'package:weather_app_v1/services/weather_service.dart';
 
-class WeatherRepository{
-  final WeatherService _service = WeatherService();
-  Future<WeatherModel> repoFetchWeather()async
+abstract class WeatherRepository{
+  static Future<WeatherModel> repoFetchWeather()async
   {
-    Map<String,dynamic> response = await _service.fetchWeather();
+    Map<String,dynamic> response = await WeatherService.fetchWeather();
     WeatherModel weather= WeatherModel.fromJson(response);
 
     return weather;
