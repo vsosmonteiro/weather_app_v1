@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather_app_v1/bloc/weather_bloc/weather_bloc.dart';
+import 'package:weather_app_v1/bloc/weather_bloc/weather_event.dart';
+import 'package:weather_app_v1/bloc/weather_bloc/weather_state.dart';
 import 'package:weather_app_v1/repositories/weather_repository.dart';
 import 'package:weather_app_v1/services/weather_service.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
@@ -38,87 +42,99 @@ class _HomePageState extends State<HomePage> {
       RainnyWidget(margin: margin1),
       SnowyWidget(margin: margin1)
     ];
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Center(
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.only(top: 48, bottom: 1),
-                child: Text(
-                  'Maceió',
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+    return BlocListener<WeatherBloc, WeatherState>(
+      listener: (context, state) {
+        if (state is StateLoadingWeather) {
+          print('a');
+        }
+        if (state is StateLoadedWeather) {
+          print('a');
+          _setweather();
+        }
+        if (state is StateErrorWeather) {}
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Center(
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 48, bottom: 1),
+                  child: Text(
+                    'Maceió',
+                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-              const Text(
-                'Segunda,11:35 da manhã',
-                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 32.0, bottom: 0),
-                child: list[weather],
-              ),
-              const Padding(
-                padding: EdgeInsets.only(bottom: 8.0),
-                child: Text(
-                  '35ºC',
-                  style: TextStyle(
-                      fontSize: 40,
-                      letterSpacing: 3,
-                      fontWeight: FontWeight.w400),
+                const Text(
+                  'Segunda,11:35 da manhã',
+                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 16.0),
-                child: Text(
-                  'Sun & Rain',
+                Padding(
+                  padding: const EdgeInsets.only(top: 32.0, bottom: 0),
+                  child: list[weather],
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(bottom: 8.0),
+                  child: Text(
+                    '35ºC',
+                    style: TextStyle(
+                        fontSize: 40,
+                        letterSpacing: 3,
+                        fontWeight: FontWeight.w400),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: Text(
+                    'Sun & Rain',
+                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                  ),
+                ),
+                const Text(
+                  'Paris',
                   style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
-              ),
-              const Text(
-                'Paris',
-                style: TextStyle(color: Colors.grey, fontSize: 18),
-              ),
-              Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  width: 48,
-                  child: const Divider(
-                    thickness: 2,
-                  )),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    _bottomwidget(
-                        'assets/icons/sunrise.png', 'Sunrise', '6.0'),
-                    _mydivider(),
-                    _bottomwidget('assets/icons/windy.png',
-                        'Wind speed', '6.0'),
-                    _mydivider(),
-                    _bottomwidget(
-                        'assets/icons/high-temperatures.png', 'Temp', '6.0'),
-                  ],
+                Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    width: 48,
+                    child: const Divider(
+                      thickness: 2,
+                    )),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _bottomwidget(
+                          'assets/icons/sunrise.png', 'Sunrise', '6.0'),
+                      _mydivider(),
+                      _bottomwidget(
+                          'assets/icons/windy.png', 'Wind speed', '6.0'),
+                      _mydivider(),
+                      _bottomwidget(
+                          'assets/icons/high-temperatures.png', 'Temp', '6.0'),
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: ElevatedButton(
-                  onPressed: onpressed == false ? () => _setweather() : null,
-                  child: const Text('Random'),
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: ElevatedButton(
+                    onPressed: onpressed == false ? () => _setweather() : null,
+                    child: const Text('Random'),
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: ElevatedButton(
-                  onPressed: () {
-                    var a = WeatherRepository().repoFetchWeather();
-                  },
-                  child: const Text('Current weather'),
-                ),
-              )
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.read<WeatherBloc>()..add(EventFetchWeather());
+                    },
+                    child: const Text('Current weather'),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
