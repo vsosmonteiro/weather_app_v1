@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   int margin1 = 0;
   int weather = 0;
   int times = 0;
+  bool isNotAnimating = true;
   bool onpressed = false;
 
   @override
@@ -43,13 +44,16 @@ class _HomePageState extends State<HomePage> {
       SnowyWidget(margin: margin1)
     ];
     return BlocListener<WeatherBloc, WeatherState>(
+      listenWhen: (previous, next) => previous != next,
       listener: (context, state) {
         if (state is StateLoadingWeather) {
           print('a');
         }
         if (state is StateLoadedWeather) {
           print('a');
-          _setweather();
+          //setWeather(state.weathercode);
+          _setWeatherWithBloc(state.weathercode);
+          //_setweather();
         }
         if (state is StateErrorWeather) {}
       },
@@ -121,7 +125,7 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: ElevatedButton(
                     onPressed: onpressed == false ? () => _setweather() : null,
-                    child: const Text('Random'),
+                    child: const Text('Next'),
                   ),
                 ),
                 Padding(
@@ -141,35 +145,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //setweather(2)
   void _setweather() async {
-    if (times < 2) {
+    if (isNotAnimating) {
+      isNotAnimating = false;
       setState(() {
         onpressed = true;
-        times += 1;
-        if (margin1 == 100) {
-          margin1 = 0;
-        } else {
-          margin1 = 100;
-        }
+        margin1 = 100;
       });
     } else {
       setState(() {
         onpressed = true;
-        if (weather < 4) {
-          weather += 1;
-        } else {
-          weather = 0;
-        }
+        isNotAnimating = true;
+        margin1 = 0;
       });
-
-      await Future.delayed(const Duration(seconds: 1), () {
+      await Future.delayed(const Duration(seconds: 2), () {
         setState(() {
-          margin1 = 100;
-          times = 1;
+          weather += 1;
         });
       });
     }
-    await Future.delayed(const Duration(seconds: 1), () {
+
+    await Future.delayed(const Duration(milliseconds: 1600), () {
       setState(() {
         onpressed = false;
       });
@@ -201,5 +198,22 @@ class _HomePageState extends State<HomePage> {
         Text(text2, style: const TextStyle(fontSize: 18))
       ],
     );
+  }
+
+  Future<void> _setWeatherWithBloc(int weathercode) async {
+    if (isNotAnimating) {
+      setState(() {
+        weather = weathercode;
+        onpressed = true;
+        margin1 = 100;
+      });
+      await Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          onpressed = false;
+        });
+      });
+    } else {
+
+    }
   }
 }

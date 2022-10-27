@@ -8,7 +8,6 @@ import 'package:weather_app_v1/repositories/weather_repository.dart';
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherBloc() : super(StateinitialWeather()) {
     on<EventFetchWeather>((event, emit) async {
-      print('a');
       emit(StateLoadingWeather());
       try {
         WeatherModel weather = await WeatherRepository.repoFetchWeather();
