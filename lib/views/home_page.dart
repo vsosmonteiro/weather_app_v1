@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_event.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_state.dart';
-import 'package:weather_app_v1/repositories/weather_repository.dart';
-import 'package:weather_app_v1/services/weather_service.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/lightning_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
@@ -33,27 +31,26 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List list = [
+      SnowyWidget(margin: margin1),
       Coveredsun(
         margin: margin1,
       ),
+      RainnyWidget(margin: margin1),
       LightningWidget(margin: margin1),
       SunWidget(
         margin: margin1,
-      ),
-      RainnyWidget(margin: margin1),
-      SnowyWidget(margin: margin1)
+      )
     ];
     return BlocListener<WeatherBloc, WeatherState>(
       listenWhen: (previous, next) => previous != next,
       listener: (context, state) {
         if (state is StateLoadingWeather) {
-          print('a');
+          print('loading');
         }
         if (state is StateLoadedWeather) {
-          print('a');
-          //setWeather(state.weathercode);
+          print('loaded');
+
           _setWeatherWithBloc(state.weathercode);
-          //_setweather();
         }
         if (state is StateErrorWeather) {}
       },
@@ -131,9 +128,9 @@ class _HomePageState extends State<HomePage> {
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: onpressed == false ? () {
                       context.read<WeatherBloc>()..add(EventFetchWeather());
-                    },
+                    }:null,
                     child: const Text('Current weather'),
                   ),
                 )
@@ -200,12 +197,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Future<void> _setWeatherWithBloc(int weathercode) async {
+  void _setWeatherWithBloc(int weathercode) async {
     if (isNotAnimating) {
       setState(() {
+        isNotAnimating=false;
         weather = weathercode;
+        print('b');
         onpressed = true;
-        margin1 = 100;
+      });
+      await Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          margin1 = 100;
+        });
       });
       await Future.delayed(const Duration(seconds: 2), () {
         setState(() {
@@ -213,6 +216,10 @@ class _HomePageState extends State<HomePage> {
         });
       });
     } else {
+      setState(() {
+        isNotAnimating=true;
+        margin1=0;
+      });
 
     }
   }
