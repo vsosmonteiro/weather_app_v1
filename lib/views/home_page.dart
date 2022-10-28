@@ -3,8 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_event.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_state.dart';
-import 'package:weather_app_v1/repositories/weather_repository.dart';
-import 'package:weather_app_v1/services/weather_service.dart';
+import 'package:weather_app_v1/models/weather_model.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/lightning_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
@@ -22,7 +21,10 @@ class _HomePageState extends State<HomePage> {
   int margin1 = 0;
   int weather = 0;
   int times = 0;
+  bool isNotAnimating = true;
   bool onpressed = false;
+  double temperature=22;
+  double windspeed=10;
 
   @override
   void initState() {
@@ -32,24 +34,27 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     List list = [
+      SnowyWidget(margin: margin1),
       Coveredsun(
         margin: margin1,
       ),
+      RainnyWidget(margin: margin1),
       LightningWidget(margin: margin1),
       SunWidget(
         margin: margin1,
-      ),
-      RainnyWidget(margin: margin1),
-      SnowyWidget(margin: margin1)
+      )
     ];
     return BlocListener<WeatherBloc, WeatherState>(
+      listenWhen: (previous, next) => previous != next,
       listener: (context, state) {
         if (state is StateLoadingWeather) {
-          print('a');
+          print('loading');
         }
         if (state is StateLoadedWeather) {
-          print('a');
-          _setweather();
+          print('loaded');
+
+          _setWeatherWithBloc(state.weathercode,state.weather);
+
         }
         if (state is StateErrorWeather) {}
       },
@@ -74,11 +79,11 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 32.0, bottom: 0),
                   child: list[weather],
                 ),
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    '35ºC',
-                    style: TextStyle(
+                    temperature.toString()+'º',
+                    style: const TextStyle(
                         fontSize: 40,
                         letterSpacing: 3,
                         fontWeight: FontWeight.w400),
@@ -107,13 +112,13 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _bottomwidget(
-                          'assets/icons/sunrise.png', 'Sunrise', '6.0'),
+                          'assets/icons/sunrise.png', 'Sunrise', '06:23'),
                       _mydivider(),
                       _bottomwidget(
-                          'assets/icons/windy.png', 'Wind speed', '6.0'),
+                          'assets/icons/windy.png', 'Wind speed', windspeed.toString()+' km/h'),
                       _mydivider(),
                       _bottomwidget(
-                          'assets/icons/high-temperatures.png', 'Temp', '6.0'),
+                          'assets/icons/high-temperatures.png', 'Temp', temperature.toString()+'º'),
                     ],
                   ),
                 ),
@@ -121,15 +126,15 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 16.0),
                   child: ElevatedButton(
                     onPressed: onpressed == false ? () => _setweather() : null,
-                    child: const Text('Random'),
+                    child: const Text('Next'),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: onpressed == false ? () {
                       context.read<WeatherBloc>()..add(EventFetchWeather());
-                    },
+                    }:null,
                     child: const Text('Current weather'),
                   ),
                 )
@@ -141,35 +146,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //setweather(2)
   void _setweather() async {
-    if (times < 2) {
+    if (isNotAnimating) {
+      isNotAnimating = false;
       setState(() {
         onpressed = true;
-        times += 1;
-        if (margin1 == 100) {
-          margin1 = 0;
-        } else {
-          margin1 = 100;
-        }
+        margin1 = 100;
       });
     } else {
       setState(() {
         onpressed = true;
-        if (weather < 4) {
-          weather += 1;
-        } else {
-          weather = 0;
-        }
+        isNotAnimating = true;
+        margin1 = 0;
       });
-
-      await Future.delayed(const Duration(seconds: 1), () {
+      await Future.delayed(const Duration(seconds: 2), () {
         setState(() {
-          margin1 = 100;
-          times = 1;
+          weather += 1;
         });
       });
     }
-    await Future.delayed(const Duration(seconds: 1), () {
+
+    await Future.delayed(const Duration(milliseconds: 1600), () {
       setState(() {
         onpressed = false;
       });
@@ -201,5 +199,37 @@ class _HomePageState extends State<HomePage> {
         Text(text2, style: const TextStyle(fontSize: 18))
       ],
     );
+  }
+
+  void _setWeatherWithBloc(int weathercode,WeatherModel weathermodel) async {
+    setState(() {
+      temperature=weathermodel.currentWeather!.temperature!;
+      windspeed=weathermodel.currentWeather!.windspeed!;
+
+    });
+    if (isNotAnimating) {
+      setState(() {
+        isNotAnimating=false;
+        weather = weathercode;
+        print('b');
+        onpressed = true;
+      });
+      await Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          margin1 = 100;
+        });
+      });
+      await Future.delayed(const Duration(seconds: 2), () {
+        setState(() {
+          onpressed = false;
+        });
+      });
+    } else {
+      setState(() {
+        isNotAnimating=true;
+        margin1=0;
+      });
+
+    }
   }
 }

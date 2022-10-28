@@ -8,16 +8,15 @@ import 'package:weather_app_v1/repositories/weather_repository.dart';
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherBloc() : super(StateinitialWeather()) {
     on<EventFetchWeather>((event, emit) async {
-      print('a');
       emit(StateLoadingWeather());
       try {
         WeatherModel weather = await WeatherRepository.repoFetchWeather();
         if (weather.currentWeather!.weathercode != null) {
           switch (weather.currentWeather!.weathercode) {
-            //0 sunny,1overcast,2raiiny,3lightinig,4snowy
+            //0 snowy,1overcast,2raiiny,3lightinig,4sunny
             case 0:
             case 1:
-              emit(StateLoadedWeather(0, weather));
+              emit(StateLoadedWeather(4, weather));
               break;
             case 2:
             case 3:
@@ -46,7 +45,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             case 77:
             case 85:
             case 86:
-              emit(StateLoadedWeather(4, weather));
+              emit(StateLoadedWeather(0, weather));
               break;
             case 95:
             case 96:
