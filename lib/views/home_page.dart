@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_bloc.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_event.dart';
 import 'package:weather_app_v1/bloc/weather_bloc/weather_state.dart';
+import 'package:weather_app_v1/models/weather_model.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/coveredsun.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/lightning_widget.dart';
 import 'package:weather_app_v1/widgets/weather_widgets/rainny_widget.dart';
@@ -22,6 +23,8 @@ class _HomePageState extends State<HomePage> {
   int times = 0;
   bool isNotAnimating = true;
   bool onpressed = false;
+  double temperature=22;
+  double windspeed=10;
 
   @override
   void initState() {
@@ -50,7 +53,8 @@ class _HomePageState extends State<HomePage> {
         if (state is StateLoadedWeather) {
           print('loaded');
 
-          _setWeatherWithBloc(state.weathercode);
+          _setWeatherWithBloc(state.weathercode,state.weather);
+
         }
         if (state is StateErrorWeather) {}
       },
@@ -75,11 +79,11 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.only(top: 32.0, bottom: 0),
                   child: list[weather],
                 ),
-                const Padding(
+                 Padding(
                   padding: EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    '35ºC',
-                    style: TextStyle(
+                    temperature.toString()+'º',
+                    style: const TextStyle(
                         fontSize: 40,
                         letterSpacing: 3,
                         fontWeight: FontWeight.w400),
@@ -108,13 +112,13 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _bottomwidget(
-                          'assets/icons/sunrise.png', 'Sunrise', '6.0'),
+                          'assets/icons/sunrise.png', 'Sunrise', '06:23'),
                       _mydivider(),
                       _bottomwidget(
-                          'assets/icons/windy.png', 'Wind speed', '6.0'),
+                          'assets/icons/windy.png', 'Wind speed', windspeed.toString()+' km/h'),
                       _mydivider(),
                       _bottomwidget(
-                          'assets/icons/high-temperatures.png', 'Temp', '6.0'),
+                          'assets/icons/high-temperatures.png', 'Temp', temperature.toString()+'º'),
                     ],
                   ),
                 ),
@@ -197,7 +201,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _setWeatherWithBloc(int weathercode) async {
+  void _setWeatherWithBloc(int weathercode,WeatherModel weathermodel) async {
+    setState(() {
+      temperature=weathermodel.currentWeather!.temperature!;
+      windspeed=weathermodel.currentWeather!.windspeed!;
+
+    });
     if (isNotAnimating) {
       setState(() {
         isNotAnimating=false;
