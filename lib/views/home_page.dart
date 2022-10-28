@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
   bool onpressed = false;
   double temperature=22;
   double windspeed=10;
+  String weatherStatus='Sunny';
 
   @override
   void initState() {
@@ -80,25 +81,21 @@ class _HomePageState extends State<HomePage> {
                   child: list[weather],
                 ),
                  Padding(
-                  padding: EdgeInsets.only(bottom: 8.0),
+                  padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    temperature.toString()+'º',
+                    '$temperatureº',
                     style: const TextStyle(
                         fontSize: 40,
                         letterSpacing: 3,
                         fontWeight: FontWeight.w400),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 16.0),
+                 Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
                   child: Text(
-                    'Sun & Rain',
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                    weatherStatus,
+                    style: const TextStyle(color: Colors.grey, fontSize: 18),
                   ),
-                ),
-                const Text(
-                  'Paris',
-                  style: TextStyle(color: Colors.grey, fontSize: 18),
                 ),
                 Container(
                     margin: const EdgeInsets.symmetric(vertical: 8),
@@ -162,7 +159,15 @@ class _HomePageState extends State<HomePage> {
       });
       await Future.delayed(const Duration(seconds: 2), () {
         setState(() {
-          weather += 1;
+          if(weather<4)
+            {
+              weather += 1;
+
+            }
+          else
+            {
+              weather=0;
+            }
         });
       });
     }
@@ -211,6 +216,23 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         isNotAnimating=false;
         weather = weathercode;
+        switch(weather){
+          case 0:
+            weatherStatus='Snowy';
+            break;
+          case 1:
+            weatherStatus='Overcast';
+            break;
+          case 2:
+            weatherStatus='Raining';
+            break;
+          case 3:
+            weatherStatus='Thunderstorm';
+          break;
+          case 4:
+            weatherStatus='Sunny';
+            break;
+        }
         print('b');
         onpressed = true;
       });
