@@ -148,12 +148,12 @@ class _HomePageState extends State<HomePage> {
     if (isNotAnimating) {
       isNotAnimating = false;
       setState(() {
-        onpressed = true;
+        onpressed = false;
         margin1 = 100;
       });
     } else {
       setState(() {
-        onpressed = true;
+        onpressed = false;
         isNotAnimating = true;
         margin1 = 0;
       });
@@ -234,7 +234,7 @@ class _HomePageState extends State<HomePage> {
             break;
         }
         print('b');
-        onpressed = true;
+        onpressed = false;
       });
       await Future.delayed(const Duration(seconds: 1), () {
         setState(() {
